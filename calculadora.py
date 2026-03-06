@@ -1,104 +1,136 @@
-# Librerias
+"""Módulo de la calculadora.
+
+Este módulo define la función de validación de tipos y la clase Calculadora,
+que permite realizar operaciones aritméticas básicas con historial.
+"""
 
 
-# Funciones
-def validar_tipo(valor_primero, valor_segundo):
+def validar_tipo(valor_primero: float, valor_segundo: float) -> None:
+    """Valida que ambos valores sean de tipo int o float.
+
+    Args:
+        valor_primero: Primer valor a validar.
+        valor_segundo: Segundo valor a validar.
+
+    Raises:
+        TypeError: Si alguno de los valores no es numérico.
+    """
     if not isinstance(valor_primero, (float, int)):
         raise TypeError("Error de Tipo: El valor ingresado no es un número")
     if not isinstance(valor_segundo, (float, int)):
         raise TypeError("Error de Tipo: El valor ingresado no es un número")
 
 
-# Clases
 class Calculadora:
-    """
-    Este es el objeto calculadora, que tiene de unico atributo el historial
-    iniciara con 4 metodos fundamentales, sumar, restar, multiplicar y dividir.
-    Además, tenemos un metodo para mostrar todo el historial guardado.
-    De esta forma se cumple la logica interna de una calculadora.
+    """Objeto calculadora con historial de operaciones.
+
+    Provee cuatro operaciones aritméticas básicas: sumar, restar,
+    multiplicar y dividir. Cada operación queda registrada en un
+    historial interno accesible mediante `mostrar_historial`.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Inicializa la calculadora con un historial vacío."""
         self.__historial = []
 
-    # Metodo privado para guardar las operaciones
     def __guardar_operacion(
         self,
         valor_primero: float,
         valor_segundo: float,
         resultado: float,
         operacion: str,
-    ):
+    ) -> None:
+        """Guarda una operación realizada en el historial interno.
+
+        Args:
+            valor_primero: Primer operando de la operación.
+            valor_segundo: Segundo operando de la operación.
+            resultado: Resultado obtenido.
+            operacion: Símbolo que representa la operación realizada.
+        """
         self.__historial.append(
             f"{valor_primero} {operacion} {valor_segundo} = {resultado}"
         )
 
-    # Metodo para sumar
-    def sumar(self, primer_valor: float, segundo_valor: float):
-        """
-        Tenemos el metodo de sumar
-         1: Recibimos 2 valores
-         2: Validamos que sean de tipo entero o flotante
-         3: Almacenamos los valores con el metodo correspondiente
-         4: Retornamos el resultado de la operación
+    def sumar(self, primer_valor: float, segundo_valor: float) -> float:
+        """Suma dos valores numéricos.
+
+        Args:
+            primer_valor: Primer operando.
+            segundo_valor: Segundo operando.
+
+        Returns:
+            El resultado de la suma.
+
+        Raises:
+            TypeError: Si alguno de los valores no es numérico.
         """
         validar_tipo(primer_valor, segundo_valor)
         resultado = primer_valor + segundo_valor
         self.__guardar_operacion(primer_valor, segundo_valor, resultado, "+")
         return resultado
 
-    # Metodo para restar
-    def restar(self, primer_valor: float, segundo_valor: float):
-        """
-        Tenemos el metodo de restar
-         1: Recibimos 2 valores
-         2: Validamos que sean de tipo entero o flotante
-         3: Almacenamos los valores con el metodo correspondiente
-         4: Retornamos el resultado de la operación
+    def restar(self, primer_valor: float, segundo_valor: float) -> float:
+        """Resta dos valores numéricos.
+
+        Args:
+            primer_valor: Primer operando.
+            segundo_valor: Segundo operando.
+
+        Returns:
+            El resultado de la resta.
+
+        Raises:
+            TypeError: Si alguno de los valores no es numérico.
         """
         validar_tipo(primer_valor, segundo_valor)
         resultado = primer_valor - segundo_valor
         self.__guardar_operacion(primer_valor, segundo_valor, resultado, "-")
         return resultado
 
-    # Metodo para dividir
+    def dividir(self, primer_valor: float, segundo_valor: float) -> float:
+        """Divide dos valores numéricos.
 
-    def dividir(self, primer_valor: float, segundo_valor: float):
-        """
-        Tenemos el metodo de dividir
-         1: Recibimos 2 valores
-         2: Validamos que sean de tipo entero o flotante
-         3: Validamos que el segundo valor no sea 0
-         4: Almacenamos los valores con el metodo correspondiente
-         5: Retornamos el resultado de la operación
+        Args:
+            primer_valor: Dividendo.
+            segundo_valor: Divisor.
+
+        Returns:
+            El resultado de la división.
+
+        Raises:
+            TypeError: Si alguno de los valores no es numérico.
+            ValueError: Si el divisor es cero.
         """
         validar_tipo(primer_valor, segundo_valor)
-        if not segundo_valor:
+        if segundo_valor == 0:
             raise ValueError("Error de valor: No se puede dividir entre cero")
         resultado = primer_valor / segundo_valor
         self.__guardar_operacion(primer_valor, segundo_valor, resultado, "/")
         return resultado
 
-    # Metodo para multiplicar
-    def multiplicar(self, primer_valor: float, segundo_valor: float):
-        """
-        Tenemos el metodo de multiplicar
-         1: Recibimos 2 valores
-         2: Validamos que sean de tipo entero o flotante
-         3: Almacenamos los valores con el metodo correspondiente
-         4: Retornamos el resultado de la operación
+    def multiplicar(self, primer_valor: float, segundo_valor: float) -> float:
+        """Multiplica dos valores numéricos.
+
+        Args:
+            primer_valor: Primer operando.
+            segundo_valor: Segundo operando.
+
+        Returns:
+            El resultado de la multiplicación.
+
+        Raises:
+            TypeError: Si alguno de los valores no es numérico.
         """
         validar_tipo(primer_valor, segundo_valor)
         resultado = primer_valor * segundo_valor
         self.__guardar_operacion(primer_valor, segundo_valor, resultado, "x")
         return resultado
 
-    # Metodo para mostrar todo el historial
-    def mostrar_historial(self):
+    def mostrar_historial(self) -> list:
+        """Retorna una copia del historial de operaciones realizadas.
+
+        Returns:
+            Lista de strings con cada operación registrada.
         """
-        Tenemos el metodo mostrar historial para el atributo privado de
-        historial.
-        """
-        print("Historial de la calculadora")
-        for operacion in self.__historial:
-            print(operacion)
+        return self.__historial.copy()

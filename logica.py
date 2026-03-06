@@ -1,10 +1,22 @@
-# Librerias
+"""Lógica de consola para la calculadora.
+
+Este módulo define funciones de validación de entrada y el flujo principal
+del programa, gestionando la interacción del usuario con la calculadora.
+"""
+
 import calculadora as c
 
 
-# Funciones
-def validar_numero(texto):
-    while 1:
+def validar_numero(texto: str) -> float:
+    """Solicita al usuario un número flotante y lo valida.
+
+    Args:
+        texto: Mensaje a mostrar en la petición de entrada.
+
+    Returns:
+        El número ingresado por el usuario.
+    """
+    while True:
         try:
             numero = float(input(texto))
             return numero
@@ -12,22 +24,33 @@ def validar_numero(texto):
             print("Error: El valor ingresado debe ser un número entero")
 
 
-def validar_opcion(texto, valor_inf, valor_sup):
-    while 1:
+def validar_opcion(texto: str, valor_inf: int, valor_sup: int) -> int:
+    """Valida que una opción numérica ingresada esté dentro de un rango.
+
+    Args:
+        texto: Mensaje a mostrar en la petición de entrada.
+        valor_inf: Valor mínimo aceptado.
+        valor_sup: Valor máximo aceptado.
+
+    Returns:
+        La opción seleccionada por el usuario.
+    """
+    while True:
         try:
             numero = int(input(texto))
             if valor_inf <= numero <= valor_sup:
                 return numero
-            else:
-                print(f"La opción debe estar entre {valor_inf} y {valor_sup}")
+            print(f"La opción debe estar entre {valor_inf} y {valor_sup}")
         except ValueError:
             print("Error: El valor ingresado debe ser un número entero")
 
 
-def imprimir_opciones():
-    print(f"{"#"*20}")
+def imprimir_opciones() -> None:
+    """Imprime el menú de opciones disponible para el usuario."""
+    separador = "#" * 20
+    print(separador)
     print("Calculadora de Adrian")
-    print(f"{"#"*20}")
+    print(separador)
     print("1: Sumar")
     print("2: Restar")
     print("3: Multiplicar")
@@ -36,72 +59,75 @@ def imprimir_opciones():
     print("6: Fin")
 
 
-def main():
+def _solicitar_operandos(titulo: str) -> tuple[float, float]:
+    """Muestra el encabezado de operación y solicita dos operandos al usuario.
+
+    Args:
+        titulo: Nombre de la operación a mostrar como encabezado.
+
+    Returns:
+        Tupla con los dos valores ingresados por el usuario.
+    """
+    separador = "#" * 20
+    print(f"\n{separador}")
+    print(titulo)
+    print(separador)
+    numero_1 = validar_numero("Ingresa el primer número: ")
+    numero_2 = validar_numero("Ingresa el segundo número: ")
+    return numero_1, numero_2
+
+
+def main() -> None:
+    """Ejecuta el flujo principal de la calculadora en consola."""
     calcular = c.Calculadora()
-    while 1:
+    while True:
         imprimir_opciones()
         opcion = validar_opcion("Elige una opción: ", 1, 6)
         match opcion:
-            case 1:  # Sumar
+            case 1:
                 try:
-                    print(f"\n{"#"*20}")
-                    print("Suma")
-                    print(f"{"#"*20}")
-                    numero_1 = validar_numero("Ingresa el primer número: ")
-                    numero_2 = validar_numero("Ingresa el segundo número: ")
+                    numero_1, numero_2 = _solicitar_operandos("Suma")
                     resultado = calcular.sumar(
                         primer_valor=numero_1, segundo_valor=numero_2
                     )
                     print(f"{numero_1} + {numero_2} = {resultado}")
-                except TypeError as e:
+                except (TypeError, ValueError) as e:
                     print(e)
-            case 2:  # Restar
+            case 2:
                 try:
-                    print(f"\n{"#"*20}")
-                    print("Resta")
-                    print(f"{"#"*20}")
-                    numero_1 = validar_numero("Ingresa el primer número: ")
-                    numero_2 = validar_numero("Ingresa el segundo número: ")
+                    numero_1, numero_2 = _solicitar_operandos("Resta")
                     resultado = calcular.restar(
                         primer_valor=numero_1, segundo_valor=numero_2
                     )
                     print(f"{numero_1} - {numero_2} = {resultado}")
-                except TypeError as e:
+                except (TypeError, ValueError) as e:
                     print(e)
-            case 3:  # Multiplicar
+            case 3:
                 try:
-                    print(f"\n{"#"*20}")
-                    print("Multiplicación")
-                    print(f"{"#"*20}")
-                    numero_1 = validar_numero("Ingresa el primer número: ")
-                    numero_2 = validar_numero("Ingresa el segundo número: ")
+                    numero_1, numero_2 = _solicitar_operandos("Multiplicación")
                     resultado = calcular.multiplicar(
                         primer_valor=numero_1, segundo_valor=numero_2
                     )
-                    print(f"{numero_1} X {numero_2} = {resultado}")
-                except TypeError as e:
+                    print(f"{numero_1} x {numero_2} = {resultado}")
+                except (TypeError, ValueError) as e:
                     print(e)
-            case 4:  # Dividir
+            case 4:
                 try:
-                    print(f"\n{"#"*20}")
-                    print("Division")
-                    print(f"{"#"*20}")
-                    numero_1 = validar_numero("Ingresa el primer número: ")
-                    numero_2 = validar_numero("Ingresa el segundo número: ")
+                    numero_1, numero_2 = _solicitar_operandos("División")
                     resultado = calcular.dividir(
                         primer_valor=numero_1, segundo_valor=numero_2
                     )
                     print(f"{numero_1} / {numero_2} = {resultado}")
-                except ValueError as e:
+                except (TypeError, ValueError) as e:
                     print(e)
-            case 5:  # Historial
-                calcular.mostrar_historial()
-        if opcion == 6:
-            break
+            case 5:
+                historial = calcular.mostrar_historial()
+                print("\nHistorial de la calculadora:")
+                for operacion in historial:
+                    print(operacion)
+            case 6:
+                break
 
 
-# Clases
-
-# Principal
 if __name__ == "__main__":
     main()
